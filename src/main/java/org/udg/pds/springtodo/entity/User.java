@@ -25,6 +25,7 @@ public class User implements Serializable {
     this.email = email;
     this.password = password;
     this.tasks = new ArrayList<>();
+    this.groups = new ArrayList<>();
   }
 
   @Id
@@ -48,6 +49,10 @@ public class User implements Serializable {
   @JsonView(Views.Complete.class)
   private Collection<Task> tasks;
 
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+  @JsonView(Views.Complete.class)
+  private Collection<Group> groups;
+
   public Long getId() {
     return id;
   }
@@ -68,8 +73,17 @@ public class User implements Serializable {
     return tasks;
   }
 
+  public Collection<Group> getGroups() {
+    groups.size();
+    return groups;
+  }
+
   public void addTask(Task task) {
     tasks.add(task);
+  }
+
+  public void addGroup(Group group) {
+    groups.add(group);
   }
 
 }
