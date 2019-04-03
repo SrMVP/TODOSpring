@@ -3,6 +3,7 @@ package org.udg.pds.springtodo.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.udg.pds.springtodo.controller.exceptions.ControllerException;
 import org.udg.pds.springtodo.entity.IdObject;
 import org.udg.pds.springtodo.entity.Group;
 import org.udg.pds.springtodo.entity.Views;
@@ -14,7 +15,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Date;
 
-@RequestMapping(path="/groups")
+@RequestMapping(path="/group")
 @RestController
 public class GroupController extends BaseController {
 
@@ -26,19 +27,17 @@ public class GroupController extends BaseController {
 
         Long userId = getLoggedUser(session);
 
-        if (group.description == null) {
-            group.description = "";
+        if (group.gName == null) {
+            throw new ControllerException("No name supplied");
+        }
+        if (group.gDescription == null) {
+            throw new ControllerException("No description supplied");
         }
 
-        if (group.name == null) {
-            group.name = "";
-        }
-
-        return groupService.addGroup(group.name,userId, group.description);
+        return groupService.addGroup(group.gName,userId, group.gDescription);
     }
 
     @GetMapping
-    @JsonView(Views.Private.class)
     public Collection<Group> listAllGroups(HttpSession session) {
         Long userId = getLoggedUser(session);
 
@@ -48,9 +47,9 @@ public class GroupController extends BaseController {
     static class R_Group {
 
         @NotNull
-        public String name;
+        public String gName;
 
         @NotNull
-        public String description;
+        public String gDescription;
     }
 }

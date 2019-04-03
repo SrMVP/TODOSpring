@@ -25,6 +25,7 @@ public class GroupService {
         return groupRepository;
     }
 
+
     public Collection<Group> getGroups(Long id) {
         Optional<User> u = userService.crud().findById(id);
         if (!u.isPresent()) throw new ServiceException("User does not exists");
